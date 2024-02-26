@@ -33,3 +33,4 @@
 8. sync to latest use a timestamp location: cloudtrailapp/timeStamp/Lastcndev.txt
     This timestamp is the start timestamp , and when finish syncing timestamp will be replaced to the 
     current.timstamp - 310s
+    ![Code Demo](./images/results.gif)
