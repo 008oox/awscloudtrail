@@ -29,3 +29,5 @@
 6. python manage.py runserver
 
 7. http://127.0.0.1:8000/cloudtrailapp/cloudtrail_records/
+
+8. sync to latest use a timestamp location: cloudtrailapp/timeStamp/Lastcndev.txt
