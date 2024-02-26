@@ -1,0 +1,166 @@
+{% load tz %}
+<!-- myapp/templates/cloudtrail_records.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>CloudTrail Records</title>
+    <!-- <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script> -->
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        /* 自定义字段宽度 */
+        .username-column {
+            width: 15%;
+        }
+
+        .eventname-column {
+            width: 18%;
+        }
+
+        .eventtime-column {
+            width: 15%;
+        }
+
+        .eventtype-column {
+            width: 10%;
+        }
+
+        .sourceipaddr-column {
+            width: 10%;
+        }
+
+        .useragent-column {
+            width: 27%;
+        }
+
+        #updateButton {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 10px;
+        }
+    </style>
+    <script>
+        async function updateData() {
+            var updateButton = document.querySelector('#updateButton');
+            updateButton.disabled = true;
+            updateButton.innerHTML = 'Syncing...';
+
+            try {
+                const response = await fetch("{% url 'update_data' %}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': "{{ csrf_token }}",
+                    },
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    var message = result.message;
+                    if (message) {
+                        alert(message);
+                    }
+                } else {
+                    console.error("Error updating data");
+                }
+            } catch (error) {
+                console.error("Error updating data:", error);
+            } finally {
+                updateButton.innerHTML = 'Sync to Latest';
+                updateButton.disabled = false;
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <h1>CloudTrail Records</h1>
+    <form method="post" action="{% url 'cloudtrail_records' %}">
+        {% csrf_token %}
+        <label for="username">User Name:</label>
+        <input type="text" name="UserName" id="username" value="{{ request.POST.UserName }}">
+
+        <label for="eventname">Event Name:</label>
+        <input type="text" name="EventName" id="eventname" value="{{ request.POST.EventName }}">
+
+        <label for="eventtype">Event Type:</label>
+        <input type="text" name="EventType" id="eventtype" value="{{ request.POST.EventType }}">
+
+        <label for="sourceipaddr">Source IP Addr:</label>
+        <input type="text" name="sourceIPAddr" id="sourceipaddr" value="{{ request.POST.sourceIPAddr }}">
+
+        <label for="useragent">User Agent:</label>
+        <input type="text" name="UserAgent" id="useragent" value="{{ request.POST.UserAgent }}">
+
+        <button type="submit">Filter</button>
+    </form>
+    <!-- <form id="updateDataForm" method="post" action="{% url 'update_data' %}">
+        {% csrf_token %}
+        <button type="button" onclick="updateData()">Update Data</button>
+    </form> -->
+    <!-- <button type="button" onclick="updateData()">Sync to Latest</button> -->
+    <button id="updateButton" type="button" onclick="updateData()">Sync to Latest</button>
+    <table id="cloudtrail_records">
+        <thead>
+            <tr>
+                <th>UserName</th>
+                <th>EventName</th>
+                <th>UserAgent</th>
+                <th>EventType</th>
+                <th>EventTime(UTC+8)</th>
+                <th>SourceIPAddr</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in page_records %}
+            <tr>
+                <td>{{ record.UserName }}</td>
+                <td>{{ record.EventName }}</td>
+                <td>{{ record.UserAgent }}</td>
+                <td>{{ record.EventType }}</td>
+                <td>{{ record.EventTime|timezone:"Asia/Shanghai"|date:"Y-m-d H:i:s" }}</td>
+                <td>{{ record.sourceIPAddr }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_records.has_previous %}
+            <a
+                href="?page=1{% if page_records.username_filter %}&UserName={{ page_records.username_filter }}{% endif %}">&laquo;
+                first</a>
+            <a
+                href="?page={{ page_records.previous_page_number }}{% if page_records.username_filter %}&UserName={{ page_records.username_filter }}{% endif %}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ page_records.number }} of {{ page_records.paginator.num_pages }}.
+            </span>
+
+            {% if page_records.has_next %}
+            <a
+                href="?page={{ page_records.next_page_number }}{% if page_records.username_filter %}&UserName={{ page_records.username_filter }}{% endif %}">next</a>
+            <a
+                href="?page={{ page_records.paginator.num_pages }}{% if page_records.username_filter %}&UserName={{ page_records.username_filter }}{% endif %}">last
+                &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+</body>
+
+</html>
