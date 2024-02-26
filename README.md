@@ -1,5 +1,5 @@
 # awscloudtrail
-1. create a mysql DB server
+1. create a mysql DB server, install django, Python:3.9.18, django:4.2.8 , mysql: 8.0
 
 2. config awscloudtrail/settings.py
     DATABASES = {
