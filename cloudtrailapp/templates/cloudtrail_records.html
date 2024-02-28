@@ -172,7 +172,7 @@
     </div>
     <div class="pagination">
         <form method="get" action="{% url 'cloudtrail_records' %}">
-            <label for="page_number">跳转到页码:</label>
+            <label for="page_number">turn_to_page:</label>
             <input type="text" name="page" id="page_number" value="{{ page_records.number }}" />
 
             <input type="hidden" name="UserName" value="{{ request.POST.UserName }}">
@@ -182,7 +182,7 @@
             <input type="hidden" name="sourceIPAddr" value="{{ request.POST.sourceIPAddr }}">
             <input type="hidden" name="UserAgent" value="{{ request.POST.UserAgent }}">
 
-            <input type="submit" value="跳转">
+            <input type="submit" value="turn">
         </form>
     </div>
 </body>
