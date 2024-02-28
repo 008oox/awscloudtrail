@@ -9,7 +9,7 @@
     <!-- <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script> -->
     <style>
         table {
-            width: 100%;
+            width: 98%;
             border-collapse: collapse;
             margin-bottom: 20px;
         }
@@ -34,16 +34,20 @@
             width: 15%;
         }
 
-        .eventtype-column {
+        .resourcename-column {
             width: 10%;
+        }
+
+        .resourcetype-column {
+            width: 15%;
         }
 
         .sourceipaddr-column {
-            width: 10%;
+            width: 15%;
         }
 
         .useragent-column {
-            width: 27%;
+            width: 20%;
         }
 
         #updateButton {
@@ -97,8 +101,11 @@
         <label for="eventname">Event Name:</label>
         <input type="text" name="EventName" id="eventname" value="{{ request.POST.EventName }}">
 
-        <label for="eventtype">Event Type:</label>
-        <input type="text" name="EventType" id="eventtype" value="{{ request.POST.EventType }}">
+        <label for="eventtype">ResourceType:</label>
+        <input type="text" name="ResourceType" id="resourcetype" value="{{ request.POST.ResourceType }}">
+
+        <label for="eventtype">ResourceName:</label>
+        <input type="text" name="ResourceName" id="resourcename" value="{{ request.POST.ResourceName }}">
 
         <label for="sourceipaddr">Source IP Addr:</label>
         <input type="text" name="sourceIPAddr" id="sourceipaddr" value="{{ request.POST.sourceIPAddr }}">
@@ -120,7 +127,8 @@
                 <th>UserName</th>
                 <th>EventName</th>
                 <th>UserAgent</th>
-                <th>EventType</th>
+                <th>ResourceType</th>
+                <th>ResourceName</th>
                 <th>EventTime(UTC+8)</th>
                 <th>SourceIPAddr</th>
             </tr>
@@ -131,7 +139,8 @@
                 <td>{{ record.UserName }}</td>
                 <td>{{ record.EventName }}</td>
                 <td>{{ record.UserAgent }}</td>
-                <td>{{ record.EventType }}</td>
+                <td>{{ record.ResourceType }}</td>
+                <td>{{ record.ResourceName }}</td>
                 <td>{{ record.EventTime|timezone:"Asia/Shanghai"|date:"Y-m-d H:i:s" }}</td>
                 <td>{{ record.sourceIPAddr }}</td>
             </tr>
@@ -160,6 +169,21 @@
                 &raquo;</a>
             {% endif %}
         </span>
+    </div>
+    <div class="pagination">
+        <form method="get" action="{% url 'cloudtrail_records' %}">
+            <label for="page_number">跳转到页码:</label>
+            <input type="text" name="page" id="page_number" value="{{ page_records.number }}" />
+
+            <input type="hidden" name="UserName" value="{{ request.POST.UserName }}">
+            <input type="hidden" name="EventName" value="{{ request.POST.EventName }}">
+            <input type="hidden" name="ResourceType" value="{{ request.POST.ResourceType }}">
+            <input type="hidden" name="ResourceName" value="{{ request.POST.ResourceName }}">
+            <input type="hidden" name="sourceIPAddr" value="{{ request.POST.sourceIPAddr }}">
+            <input type="hidden" name="UserAgent" value="{{ request.POST.UserAgent }}">
+
+            <input type="submit" value="跳转">
+        </form>
     </div>
 </body>
 
