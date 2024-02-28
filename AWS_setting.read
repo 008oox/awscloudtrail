@@ -9,22 +9,23 @@ Reference to Tree structure below:
 Tree of directory:
 awscloudtrail
 ├───awscloudtrail
-│   └───settings.py
+│   ├───settings.py
+│   └─── ...        
 ├───cloudtrailapp
 │   ├───migrations
 │   ├───templates
 │   ├───timeStamp
 │   ├───models.py
-│   └───views.py
+│   ├───views.py
+│   └─── ...
+├───images
 ├───AWS_settings.read
 ├───README.md
-├───manager.py
-└───images
+└───manager.py
 Save
 ├───SettleAPI.py
 ├───cndev.txt
 └───cnprod.txt
-
 
 
 both cndev.txt and cnprod.txt contains 2 string lines:
