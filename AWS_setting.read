@@ -27,7 +27,12 @@ Save
 
 
 
-Code of SettleAPI.py:
+both cndev.txt and cnprod.txt contains 2 string lines:
+<Your Access key to visit AWS>
+<Your Secure key to visit AWS>
+
+
+Code of SettleAPI.py, remember to modify region_name with the right region you want, this python file will generate 'boto3.session' and 'boto3.client' based on 'cndev.txt' and 'cnprod.txt':
 import os, boto3
 from typing import Generator
 class SettleAPI:
@@ -78,8 +83,3 @@ class SettleAPI:
         Access, Secret = SettleAPI.valid_env(env)  # type: ignore
         client = boto3.client(service, aws_access_key_id=Access, aws_secret_access_key=Secret, region_name="cn-north-1")
         return client
-
-
-cndev.txt contains 2 string lines:
-<Your Access key to visit AWS>
-<Your Secure key to visit AWS>
