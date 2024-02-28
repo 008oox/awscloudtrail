@@ -1,11 +1,11 @@
-in views.py
-
-we import these sections:
+in views.py We import these sections:
     current_file_directory = Path(__file__).resolve().parent
     want_directory = current_file_directory.parent.parent
     sys.path.append(str(want_directory))
     from Save import SettleAPI as SetAPI
 
+These sections call AWS API by boto3. To keep these sections running properly, we must create a folder named 'Save'. The 'Save' folder must be in the same directory as the 'awscloudtrail' folder.
+Reference to Tree structure below:
 Tree of directory:
 awscloudtrail
 ├───awscloudtrail
@@ -16,12 +16,16 @@ awscloudtrail
 │   ├───timeStamp
 │   ├───models.py
 │   └───views.py
+├───AWS_settings.read
+├───README.md
 ├───manager.py
 └───images
 Save
 ├───SettleAPI.py
 ├───cndev.txt
 └───cnprod.txt
+
+
 
 Code of SettleAPI.py:
 import os, boto3
@@ -79,7 +83,3 @@ class SettleAPI:
 cndev.txt contains 2 string lines:
 <Your Access key to visit AWS>
 <Your Secure key to visit AWS>
-
-
-
-
