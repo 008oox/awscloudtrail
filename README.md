@@ -15,18 +15,18 @@
             "PORT": "3306",
         }
     }
-    2.a Mysql8.0: database name should be cloudtrailrecord, cotains 2 tables: cloudtrailcndev & cloudtrailcnprod. reference to cloudtrailapp/models.py
+  Mysql8.0: database name should be cloudtrailrecord, cotains 2 tables: cloudtrailcndev & cloudtrailcnprod. reference to cloudtrailapp/models.py
 
 
 3. modify cloudtrailapp/models.py
 
-4. database Feature with these fields, currently we have 2 tables cndev/cnprod:
-    UserName
-    UserAgent
-    EventName
-    EventType
-    EventTime
-    sourceIPAddr
+4. database Feature with these fields, currently we have 2 tables cndev/cnprod:<br>
+    UserName<br>
+    UserAgent<br>
+    EventName<br>
+    EventType<br>
+    EventTime<br>
+    sourceIPAddr<br>
 
 5. python manage.py makemigrations
 
