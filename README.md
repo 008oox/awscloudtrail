@@ -70,7 +70,7 @@
    http://127.0.0.1:8000/cloudtrailapp/cloudtrail_records/cndev/ <br>
    http://127.0.0.1:8000/cloudtrailapp/cloudtrail_records/cnprod/
 
-8. sync to latest use a timestamp, file location: cloudtrailapp/timeStamp/Lastcndev.txt & Lastcnprod.txt<br>
+8. Button 'sync to latest' use timestamp, file location: cloudtrailapp/timeStamp/Lastcndev.txt & Lastcnprod.txt<br>
    Timestamp in file is used as start timestamp, after finishing sync, new timestamp will be replaced into file:<br>
    Replaced_timestamp = (timstamp_of_current_time - 310)
 
