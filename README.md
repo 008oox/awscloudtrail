@@ -3,8 +3,9 @@
 
 1. create a mysql DB server, install django, Python:3.9.18, django:4.2.8 , mysql: 8.0
 
-2. Mysql8.0: database name should be cloudtrailrecord, cotains 2 tables: cloudtrailcndev & cloudtrailcnprod. reference to cloudtrailapp/models.py<br>
-    config awscloudtrail/settings.py
+2. Mysql8.0: database name should be cloudtrailrecord, cotains 2 tables: <br>
+    cloudtrailcndev & cloudtrailcnprod. reference to cloudtrailapp/models.py<br>
+    config awscloudtrail/settings.py  (this config define database in settings.py)
     ```json
     DATABASES = {
         "default": {
@@ -58,17 +59,18 @@
     EventTime<br>
     sourceIPAddr<br>
 
-5. python manage.py makemigrations
-
+5. Generate database and tables in Django by terminal <br>
+   python manage.py makemigrations <br>
    python manage.py migrate
 
-6. python manage.py runserver
+6. Start django <br>
+   python manage.py runserver
 
 7. http://127.0.0.1:8000/cloudtrailapp/cloudtrail_records/cndev/ <br>
    http://127.0.0.1:8000/cloudtrailapp/cloudtrail_records/cnprod/
 
 8. sync to latest use a timestamp location: cloudtrailapp/timeStamp/Lastcndev.txt
-    This timestamp is the start timestamp , and when finish syncing timestamp will be replaced to the 
+    This timestamp is the start timestamp , and when finish syncing timestamp will be: <br>
     current.timstamp - 310s
 
 ![Code Demo](./images/results.gif)
