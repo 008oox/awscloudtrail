@@ -51,7 +51,7 @@
     ```
     </pre>
 
-4. database Feature with these fields, currently we have 2 tables regarding to cndev & cnprod:<br>
+4.  We have 1 database with 2 tables regarding to cndev & cnprod, each table contains these fields:<br>
     UserName<br>
     UserAgent<br>
     EventName<br>
