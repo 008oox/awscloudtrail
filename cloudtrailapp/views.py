@@ -10,19 +10,18 @@ from Save import SettleAPI as SetAPI
 
 from .utils import render_Str_Name
 from django.shortcuts import render
-from .models import CloudTrailRecord
+from .models import CloudTrailRecord, CloudTrailCndevRecord, CloudTrailCnprodRecord
 from django.views.decorators.csrf import csrf_exempt
 from .GetCloudTrail import getCloudTrail
 from django.http import JsonResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.db.models import Q
 
 
-def GetRecord():
-    session = SetAPI.SettleAPI.getSession("cndev")
+def GetRecord(ENV):
+    session = SetAPI.SettleAPI.getSession(ENV)
     End = int(time.time()) - 310
     # timestamp should be pushed forward 5 mins, as in AWS cloudtrail records will be synced per 5 mins
-    Start = getCloudTrail.Sync_time(End)
+    Start = getCloudTrail.Sync_time(End, ENV)
     UserList = getUserList(session)
     processed_events_list = []
 
@@ -65,17 +64,18 @@ def GetRecord():
 
 
 @csrf_exempt
-def update_data(request):
+def update_data(request, ENV):
+    Table = {"cndev": CloudTrailCndevRecord, "cnprod": CloudTrailCnprodRecord}
     if request.method == "POST":
         try:
-            aws_data = GetRecord()
+            aws_data = GetRecord(ENV)
             for data in aws_data:
-                CloudTrailRecord.objects.create(**data)
+                Table[ENV].objects.create(**data)
             return JsonResponse({"message": "Data updated successfully."})
         except Exception as e:
             return JsonResponse({"error_message": f"Error updating data: {e}"})
 
-    return render({"message": ""})
+    return HttpResponse(json.dumps({"message": ""}), content_type="application/json")
 
 
 def getUserList(session):
@@ -84,7 +84,7 @@ def getUserList(session):
     return UserList
 
 
-def cloudtrail_records(request):
+def cloudtrail_records(request, ENV):
     username_filter = ""
     eventname_filter = ""
     resourcetype_filter = ""
@@ -129,7 +129,8 @@ def cloudtrail_records(request):
     if useragent_filter:
         filters["UserAgent__icontains"] = useragent_filter
 
-    records = CloudTrailRecord.objects.filter(**filters).order_by("EventTime")
+    ModelClass = {"cndev": CloudTrailCndevRecord, "cnprod": CloudTrailCnprodRecord}
+    records = ModelClass[ENV].objects.filter(**filters).order_by("EventTime")
     items_per_page = 200
     paginator = Paginator(records, items_per_page)
     page_number = int(request.GET.get("page", 1))
@@ -152,6 +153,7 @@ def cloudtrail_records(request):
             "resourcename_filter": resourcename_filter,
             "sourceipaddr_filter": sourceipaddr_filter,
             "useragent_filter": useragent_filter,
+            "ENV": ENV,
         },
     )
 

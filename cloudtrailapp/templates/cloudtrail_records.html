@@ -64,7 +64,7 @@
             updateButton.innerHTML = 'Syncing...';
 
             try {
-                const response = await fetch("{% url 'update_data' %}", {
+                const response = await fetch("{% url 'update_data' ENV=ENV %}", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -93,7 +93,7 @@
 
 <body>
     <h1>CloudTrail Records</h1>
-    <form method="post" action="{% url 'cloudtrail_records' %}">
+    <form method="post" action="{% url 'cloudtrail_records' ENV=ENV %}">
         {% csrf_token %}
         <label for="username">User Name:</label>
         <input type="text" name="UserName" id="username" value="{{ request.POST.UserName }}">
@@ -115,7 +115,7 @@
 
         <button type="submit">Filter</button>
     </form>
-    <!-- <form id="updateDataForm" method="post" action="{% url 'update_data' %}">
+    <!-- <form id="updateDataForm" method="post" action="{% url 'update_data' ENV=ENV %}">
         {% csrf_token %}
         <button type="button" onclick="updateData()">Update Data</button>
     </form> -->
@@ -171,7 +171,7 @@
         </span>
     </div>
     <div class="pagination">
-        <form method="get" action="{% url 'cloudtrail_records' %}">
+        <form method="get" action="{% url 'cloudtrail_records' ENV=ENV %}">
             <label for="page_number">turn_to_page:</label>
             <input type="text" name="page" id="page_number" value="{{ page_records.number }}" />
 

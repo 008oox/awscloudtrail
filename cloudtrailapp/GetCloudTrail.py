@@ -33,9 +33,9 @@ class getCloudTrail:
 
         return all_events
 
-    def Sync_time(End):
+    def Sync_time(End, ENV):
         Current_directory = os.path.dirname(__file__)
-        File_path = os.path.join(Current_directory, "timeStamp", "Lastcndev.txt")
+        File_path = os.path.join(Current_directory, "timeStamp", "Last" + ENV + ".txt")
         with open(File_path, "r") as File:
             Content = File.read()
             Start = int(Content) if Content else 1707000000

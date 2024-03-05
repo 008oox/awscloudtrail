@@ -4,6 +4,6 @@ from . import views
 
 urlpatterns = [
     path("", views.index, name="index"),
-    path("update_data/", views.update_data, name="update_data"),
-    path("cloudtrail_records/", views.cloudtrail_records, name="cloudtrail_records"),
+    path("update_data/<str:ENV>/", views.update_data, name="update_data"),
+    path("cloudtrail_records/<str:ENV>/", views.cloudtrail_records, name="cloudtrail_records"),
 ]

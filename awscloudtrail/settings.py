@@ -84,7 +84,7 @@ WSGI_APPLICATION = "awscloudtrail.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": "cloudtrailcndev",
+        "NAME": "cloudtrailrecord",
         "USER": "root",
         "PASSWORD": "111111",
         "HOST": "localhost",

@@ -14,4 +14,16 @@ class CloudTrailRecord(models.Model):
         return f"{self.EventName} by {self.UserName} on {self.EventTime}"
 
     class Meta:
-        db_table = "cloudtrailrecord"
+        abstract = True
+
+
+class CloudTrailCndevRecord(CloudTrailRecord):
+    class Meta:
+        db_table = "cloudtrailcndev"
+        app_label = "cloudtrailapp"
+
+
+class CloudTrailCnprodRecord(CloudTrailRecord):
+    class Meta:
+        db_table = "cloudtrailcnprod"
+        app_label = "cloudtrailapp"

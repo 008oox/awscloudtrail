@@ -19,7 +19,7 @@
     {% if error_message %}
     <p style="color: red;">{{ error_message }}</p>
     {% else %}
-    <form method="post" action="{% url 'update_data' %}">
+    <form method="post" action="{% url 'update_data' ENV=ENV %}">
         {% csrf_token %}
         <button type="submit">Sync Now</button>
     </form>
