@@ -1,4 +1,7 @@
-# awscloudtrail
+# awscloudtrail 
+These codes used for downloading cloudtrail data from AWS saved into mysql database.<br>
+Quickly filter event information based on certain field content.<br>
+
 0. We need an access key to login to AWS cloud, for more detail review AWS_setting.read
 
 1. create a mysql DB server, install django, Python:3.9.18, django:4.2.8 , mysql: 8.0
