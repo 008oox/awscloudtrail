@@ -1,6 +1,6 @@
 # awscloudtrail 
 These codes used for downloading cloudtrail data from AWS saved into mysql database.<br>
-Quickly filter event information based on certain field content.<br>
+Users can open the web link, quickly filter event information based on certain field content, and trace relevant log details.<br>
 
 0. We need an access key to login to AWS cloud, for more detail review AWS_setting.read
 
