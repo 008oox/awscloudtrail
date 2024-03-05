@@ -15,7 +15,7 @@
             "PORT": "3306",
         }
     }
-2.a Mysql8.0: database name should be cloudtrailrecord , and have 2 tables: cloudtrailcndev & cloudtrailcnprod. reference to cloudtrailapp/models.py
+    2.a Mysql8.0: database name should be cloudtrailrecord, cotains 2 tables: cloudtrailcndev & cloudtrailcnprod. reference to cloudtrailapp/models.py
 
 
 3. modify cloudtrailapp/models.py
@@ -34,8 +34,8 @@
 
 6. python manage.py runserver
 
-7. http://127.0.0.1:8000/cloudtrailapp/cloudtrail_records/cnprod/
-   http://127.0.0.1:8000/cloudtrailapp/cloudtrail_records/cndev/
+7. http://127.0.0.1:8000/cloudtrailapp/cloudtrail_records/cndev/ <br>
+   http://127.0.0.1:8000/cloudtrailapp/cloudtrail_records/cnprod/
 
 8. sync to latest use a timestamp location: cloudtrailapp/timeStamp/Lastcndev.txt
     This timestamp is the start timestamp , and when finish syncing timestamp will be replaced to the 
