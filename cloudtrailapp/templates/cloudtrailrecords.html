@@ -1,5 +1,5 @@
 {% load tz %}
-<!-- myapp/templates/cloudtrail_records.html -->
+<!-- myapp/templates/cloudtrailrecords.html -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -56,6 +56,12 @@
             right: 10px;
             padding: 10px;
         }
+
+        .top-after-link {
+            position: absolute;
+            top: 20px;
+            right: 200px;
+        }
     </style>
     <script>
         async function updateData() {
@@ -93,6 +99,7 @@
 
 <body>
     <h1>CloudTrail Records</h1>
+    <a href="{% url 'resource_view' ENV=ENV %}" class="top-after-link">Link_To_ResourcePage</a>
     <form method="post" action="{% url 'cloudtrail_records' ENV=ENV %}">
         {% csrf_token %}
         <label for="username">User Name:</label>

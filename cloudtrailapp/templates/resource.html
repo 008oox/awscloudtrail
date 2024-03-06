@@ -1,0 +1,74 @@
+{% load tz %}
+<!-- resource.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resource Statistics</title>
+    <style>
+        .custom-form {
+            margin-right: 20px;
+        }
+
+        body {
+            position: relative;
+            margin: 20px;
+            padding-top: 10px;
+        }
+
+        .top-after-link {
+            position: absolute;
+            top: 50px;
+            left: 300px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Resource Statistics</h1>
+    <a href="{% url 'cloudtrail_records' ENV=ENV %}" class="top-after-link">Link_To_Cloudtrailrecords</a>
+
+    <form method="post" action="{% url 'resource_view' ENV=ENV %}" class="custom-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">filter</button>
+    </form>
+
+    {% if resource_stats %}
+    <h2>Resource Statistics from {{ ENV }}</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>UserName</th>
+                <th>EventName</th>
+                <th>UserAgent</th>
+                <th>EventTime</th>
+                <th>ResourceType</th>
+                <th>ResourceName</th>
+                <th>SourceIP</th>
+                <!-- <th>ResourceCount</th> -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for stat in resource_stats %}
+            <tr>
+                <td>{{ stat.UserName }}</td>
+                <td>{{ stat.EventName }}</td>
+                <td>{{ stat.UserAgent }}</td>
+                <td>{{ stat.EventTime|timezone:"Asia/Shanghai"|date:"Y-m-d H:i:s" }}</td>
+                <td>{{ stat.ResourceType }}</td>
+                <td>{{ stat.ResourceName }}</td>
+                <td>{{ stat.sourceIPAddr }}</td>
+                <!-- <td>{{ stat.resource_count }}</td> -->
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No resource statistics available.</p>
+    {% endif %}
+</body>
+
+</html>

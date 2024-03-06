@@ -1,6 +1,6 @@
 # awscloudtrail 
 These codes used for downloading cloudtrail data from AWS saved into mysql database.<br>
-Users can open the web link, quickly filter event information based on certain field content, and trace relevant log details.<br>
+In browser, user can quickly filter event information based on certain field content and trace related log details.<br>
 
 0. We need an access key to login to AWS cloud, for more detail review AWS_setting.read
 
@@ -69,12 +69,18 @@ Users can open the web link, quickly filter event information based on certain f
 6. Start django: <br>
    python manage.py runserver
 
-7. open web link: <br>
-   http://127.0.0.1:8000/cloudtrailapp/cloudtrail_records/cndev/ <br>
-   http://127.0.0.1:8000/cloudtrailapp/cloudtrail_records/cnprod/
+7. open web link<br>
+   Get all data from database:<br>
+   http://127.0.0.1:8000/cloudtrailapp/cloudtrailrecords/cndev/ <br>
+   http://127.0.0.1:8000/cloudtrailapp/cloudtrailrecords/cnprod/ <br>
+   Filter data which user use AWS resource through DateTime and UserName field:<br>
+   http://127.0.0.1:8000/cloudtrailapp/resource/cndev/ <br>
+   http://127.0.0.1:8000/cloudtrailapp/resource/cnprod/ <br>
 
 8. Button 'sync to latest' use timestamp, file location: cloudtrailapp/timeStamp/Lastcndev.txt & Lastcnprod.txt<br>
    Timestamp in file is used as start timestamp, after finishing sync, new timestamp will be replaced into file:<br>
-   Replaced_timestamp = (timstamp_of_current_time - 310)
+   Replaced_timestamp = (timstamp_of_current_time - 310)<br>
 
-![Code Demo](./images/results.gif)
+![Code Demo](./images/Main.gif)<br>
+
+![Code Demo](./images/resource.gif)<br>

@@ -10,11 +10,16 @@ from Save import SettleAPI as SetAPI
 
 from .utils import render_Str_Name
 from django.shortcuts import render
-from .models import CloudTrailRecord, CloudTrailCndevRecord, CloudTrailCnprodRecord
+from .models import CloudTrailCndevRecord, CloudTrailCnprodRecord
 from django.views.decorators.csrf import csrf_exempt
 from .GetCloudTrail import getCloudTrail
 from django.http import JsonResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db.models import Count, F, Q
+from .forms import DateRangeForm
+
+
+Table = {"cndev": CloudTrailCndevRecord, "cnprod": CloudTrailCnprodRecord}
 
 
 def GetRecord(ENV):
@@ -65,7 +70,6 @@ def GetRecord(ENV):
 
 @csrf_exempt
 def update_data(request, ENV):
-    Table = {"cndev": CloudTrailCndevRecord, "cnprod": CloudTrailCnprodRecord}
     if request.method == "POST":
         try:
             aws_data = GetRecord(ENV)
@@ -129,8 +133,7 @@ def cloudtrail_records(request, ENV):
     if useragent_filter:
         filters["UserAgent__icontains"] = useragent_filter
 
-    ModelClass = {"cndev": CloudTrailCndevRecord, "cnprod": CloudTrailCnprodRecord}
-    records = ModelClass[ENV].objects.filter(**filters).order_by("EventTime")
+    records = Table[ENV].objects.filter(**filters).order_by("EventTime")
     items_per_page = 200
     paginator = Paginator(records, items_per_page)
     page_number = int(request.GET.get("page", 1))
@@ -144,7 +147,7 @@ def cloudtrail_records(request, ENV):
 
     return render(
         request,
-        "cloudtrail_records.html",
+        "cloudtrailrecords.html",
         {
             "page_records": page_records,
             "username_filter": username_filter,
@@ -155,6 +158,41 @@ def cloudtrail_records(request, ENV):
             "useragent_filter": useragent_filter,
             "ENV": ENV,
         },
+    )
+
+
+def resource_view(request, ENV):
+    form = DateRangeForm(request.POST or None)
+    resource_stats = []
+
+    if request.method == "POST" and form.is_valid():
+        start_date = form.cleaned_data["start_date"]
+        end_date = form.cleaned_data["end_date"]
+        NameKey = form.cleaned_data.get("UserName", "")
+        EventKey = form.cleaned_data.get("EventName", "")
+        ResourceTypeKey = form.cleaned_data.get("ResourceType", "")
+        ResourceNameKey = form.cleaned_data.get("ResourceName", "")
+
+        resource_stats = (
+            Table[ENV]
+            .objects.filter(
+                EventTime__date__gte=start_date,
+                EventTime__date__lte=end_date,
+            )
+            .filter(UserName__icontains=NameKey)
+            .filter(EventName__icontains=EventKey)
+            .filter(ResourceType__icontains=ResourceTypeKey)
+            .filter(ResourceName__icontains=ResourceNameKey)
+            .exclude(Q(EventName__icontains="Get") | Q(EventName__icontains="Describe") | Q(ResourceType="-"))
+            .values("UserName", "EventName", "UserAgent", "EventTime", "ResourceType", "ResourceName", "sourceIPAddr")
+            # .annotate(resource_count=Count("ResourceType"))
+            # .filter(resource_count__gt=0)
+        )
+
+    return render(
+        request,
+        "resource.html",
+        {"form": form, "resource_stats": resource_stats, "ENV": ENV},
     )
 
 
