@@ -28,7 +28,7 @@ def GetRecord(ENV):
     # timestamp should be pushed forward 5 mins, as in AWS cloudtrail records will be synced per 5 mins
     Start = getCloudTrail.Sync_time(End, ENV)
     UserList = getUserList(session)
-    processed_events_list = []
+    processed_events_list, all_processed_events = [], []
 
     def get_combined_resource_values(resources, key):
         if resources:
@@ -61,11 +61,18 @@ def GetRecord(ENV):
                 else:
                     processed_events_list.append(output)
 
+                if len(processed_events_list) >= 10000:
+                    all_processed_events.append(tuple(processed_events_list[::-1]))
+                    processed_events_list.clear()
+
+        all_processed_events.append(tuple(processed_events_list[::-1]))
+
     except Exception as e:
         getCloudTrail.Sync_time(Start)
         raise e
 
-    return processed_events_list[::-1]
+    return all_processed_events[::-1]
+    # return processed_events_list[::-1]
 
 
 @csrf_exempt
@@ -73,8 +80,9 @@ def update_data(request, ENV):
     if request.method == "POST":
         try:
             aws_data = GetRecord(ENV)
-            for data in aws_data:
-                Table[ENV].objects.create(**data)
+            for Listdata in aws_data:
+                for data in Listdata:
+                    Table[ENV].objects.create(**data)
             return JsonResponse({"message": "Data updated successfully."})
         except Exception as e:
             return JsonResponse({"error_message": f"Error updating data: {e}"})
