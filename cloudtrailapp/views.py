@@ -193,8 +193,6 @@ def resource_view(request, ENV):
             .filter(ResourceName__icontains=ResourceNameKey)
             .exclude(Q(EventName__icontains="Get") | Q(EventName__icontains="Describe") | Q(ResourceType="-"))
             .values("UserName", "EventName", "UserAgent", "EventTime", "ResourceType", "ResourceName", "sourceIPAddr")
-            # .annotate(resource_count=Count("ResourceType"))
-            # .filter(resource_count__gt=0)
         )
 
     return render(

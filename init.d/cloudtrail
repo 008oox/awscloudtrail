@@ -1,0 +1,42 @@
+#!/bin/bash
+
+#chkconfig: 2345 90 10
+
+# python api port 31080 for creating  new shell package
+
+
+SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
+
+workdir="$(dirname $SCRIPT_DIR)"
+
+daemon_start() {
+    cd $workdir
+    nohup python3 $workdir/manage.py runserver 0.0.0.0:31080 > $workdir/logs/access.log 2>&1  &
+    echo "Server started."
+}
+
+daemon_stop() {
+    pid=`ps -ef | grep "$workdir/manage.py" | grep -v grep | awk '{ print $2 }'`
+    echo $pid
+    kill $pid
+    sleep 2
+    echo "Server killed."
+}
+
+case "$1" in
+  start)
+    daemon_start
+    ;;
+  stop)
+    daemon_stop
+    ;;
+  restart)
+    daemon_stop
+    daemon_start
+    ;;
+  *)
+    echo "Usage: cloudtrail {start|stop|restart}"
+    exit 1
+esac
+
+exit 0
