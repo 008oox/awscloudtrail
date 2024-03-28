@@ -1,10 +1,6 @@
-in views.py We import these sections:
-    current_file_directory = Path(__file__).resolve().parent
-    want_directory = current_file_directory.parent.parent
-    sys.path.append(str(want_directory))
-    from Save import SettleAPI as SetAPI
+In views.py, functions call modules from the folder 'GetRecordFromAWS', where all Python files will import the 'Save' folder. This 'Save' folder helps to use access key and secure key to call AWS Boto3 session and client.
 
-These sections call AWS API by boto3. To keep these sections running properly, we must create a folder named 'Save'. The 'Save' folder must be in the same directory as the 'awscloudtrail' folder.
+To keep these sections running properly, we must create a folder named 'Save'. The 'Save' folder must be in the same directory as the 'awscloudtrail' folder.
 Reference to Tree structure below:
 Tree of directory:
 awscloudtrail
@@ -12,9 +8,11 @@ awscloudtrail
 │   ├───settings.py
 │   └─── ...        
 ├───cloudtrailapp
+│   ├───GetRecordFromAWS
 │   ├───migrations
 │   ├───templates
 │   ├───timeStamp
+│   ├───ViewModels
 │   ├───models.py
 │   ├───views.py
 │   └─── ...
@@ -33,7 +31,7 @@ both cndev.txt and cnprod.txt contains 2 string lines:
 <Your Secure key to visit AWS>
 
 
-Code of SettleAPI.py, remember to modify region_name with the right region you want, this python file will generate 'boto3.session' and 'boto3.client' based on 'cndev.txt' and 'cnprod.txt':
+Code of SettleAPI.py for your reference, remember to modify 'region_name' with the right region you want, this python file will generate 'boto3.session' and 'boto3.client' based on 'cndev.txt' and 'cnprod.txt':
 import os, boto3
 from typing import Generator
 class SettleAPI:

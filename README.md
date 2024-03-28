@@ -2,7 +2,7 @@
 These codes used for downloading cloudtrail data from AWS saved into mysql database.<br>
 In browser, user can quickly filter event information based on certain field content and trace related log details.<br>
 
-0. We need an access key to login to AWS cloud, for more detail review AWS_setting.read
+0. We need an access key to login to AWS cloud, for more detail review **AWS_setting.read**
 
 1. create a mysql DB server, install django, Python:3.9.18, django:4.2.8 , mysql: 8.0
 
@@ -22,7 +22,7 @@ In browser, user can quickly filter event information based on certain field con
     } 
 
 
-3. modify cloudtrailapp/models.py:
+3. modify cloudtrailapp/models.py with the table name you want, one table corresponds to one AWS environment:
     <pre>
     ```python
     from django.db import models
@@ -35,6 +35,7 @@ In browser, user can quickly filter event information based on certain field con
         ResourceType = models.CharField(max_length=200)
         EventTime = models.DateTimeField()
         sourceIPAddr = models.GenericIPAddressField()
+        RequestParameters = models.CharField(max_length=2000, blank=True)
 
         def __str__(self):
             return f"{self.EventName} by {self.UserName} on {self.EventTime}"
@@ -50,17 +51,19 @@ In browser, user can quickly filter event information based on certain field con
     class CloudTrailCnprodRecord(CloudTrailRecord):
         class Meta:
             db_table = "cloudtrailcnprod"
-    
+            app_label = "cloudtrailapp"
     ```
     </pre>
 
 4.  We have 1 database with 2 tables regarding to cndev & cnprod, each table contains these fields:<br>
-    UserName<br>
-    UserAgent<br>
-    EventName<br>
-    EventType<br>
-    EventTime<br>
-    sourceIPAddr<br>
+    field 'UserName'<br>
+    field 'UserAgent' used in view 'CloudTrail Records'<br>
+    field 'EventName'<br>
+    field 'ResourceName'<br>
+    field 'ResourceType'<br>
+    field 'EventTime'<br>
+    field 'sourceIPAddr'<br>
+    field 'RequestParameters' used in view 'Resource Statistics'<br>
 
 5. Generate database and tables in Django by terminal: <br>
    python manage.py makemigrations <br>
