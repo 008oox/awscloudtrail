@@ -9,6 +9,7 @@ class CloudTrailRecord(models.Model):
     ResourceType = models.CharField(max_length=200)
     EventTime = models.DateTimeField()
     sourceIPAddr = models.GenericIPAddressField()
+    RequestParameters = models.CharField(max_length=2000, blank=True)
 
     def __str__(self):
         return f"{self.EventName} by {self.UserName} on {self.EventTime}"

@@ -74,14 +74,25 @@ WSGI_APPLICATION = "awscloudtrail.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.mysql",
+#         "NAME": "cloudtrailrecord",
+#         "USER": "root",
+#         "PASSWORD": "111111",
+#         "HOST": "localhost",
+#         "PORT": "3306",
+#     }
+# }
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
         "NAME": "cloudtrailrecord",
-        "USER": "root",
+        "USER": "king",
         "PASSWORD": "111111",
-        "HOST": "localhost",
-        "PORT": "3306",
+        "HOST": "brook.cry6s91yik6b.rds.cn-north-1.amazonaws.com.cn",
+        "PORT": "33066",
     }
 }
 

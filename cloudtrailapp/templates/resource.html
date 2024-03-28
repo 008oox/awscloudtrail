@@ -12,6 +12,18 @@
             margin-right: 20px;
         }
 
+        .long-text-Resource {
+            word-wrap: break-word;
+            word-break: break-all;
+            max-width: 400px;
+        }
+
+        .long-text {
+            word-wrap: break-word;
+            word-break: break-all;
+            max-width: 800px;
+        }
+
         body {
             position: relative;
             margin: 20px;
@@ -43,10 +55,10 @@
             <tr>
                 <th>UserName</th>
                 <th>EventName</th>
-                <th>UserAgent</th>
                 <th>EventTime</th>
                 <th>ResourceType</th>
                 <th>ResourceName</th>
+                <th>RequestParameters</th>
                 <th>SourceIP</th>
                 <!-- <th>ResourceCount</th> -->
             </tr>
@@ -56,10 +68,10 @@
             <tr>
                 <td>{{ stat.UserName }}</td>
                 <td>{{ stat.EventName }}</td>
-                <td>{{ stat.UserAgent }}</td>
                 <td>{{ stat.EventTime|timezone:"Asia/Shanghai"|date:"Y-m-d H:i:s" }}</td>
-                <td>{{ stat.ResourceType }}</td>
-                <td>{{ stat.ResourceName }}</td>
+                <td class="long-text-Resource">{{ stat.ResourceType }}</td>
+                <td class="long-text-Resource">{{ stat.ResourceName }}</td>
+                <td class="long-text">{{ stat.RequestParameters }}</td>
                 <td>{{ stat.sourceIPAddr }}</td>
                 <!-- <td>{{ stat.resource_count }}</td> -->
             </tr>

@@ -1,7 +1,13 @@
 import json, sys, time, os
 from datetime import datetime
 
-sys.path.append(r"d:\Work\CQC\aws_ops")
+# sys.path.append(r"d:\Work\CQC\aws_ops")
+current_file_path = os.path.abspath(__file__)
+SaveDirectory = os.path.abspath(os.path.join(current_file_path, "../../../../"))
+timestamp_path = os.path.abspath(os.path.join(current_file_path, "../.."))
+sys.path.append(SaveDirectory)
+
+
 from Save import SettleAPI as SetAPI
 import datetrans as datetrans
 
@@ -34,8 +40,7 @@ class getCloudTrail:
         return all_events
 
     def Sync_time(End, ENV):
-        Current_directory = os.path.dirname(__file__)
-        File_path = os.path.join(Current_directory, "timeStamp", "Last" + ENV + ".txt")
+        File_path = os.path.join(timestamp_path, "timeStamp", "Last" + ENV + ".txt")
         with open(File_path, "r") as File:
             Content = File.read()
             Start = int(Content) if Content else 1707000000
@@ -62,13 +67,3 @@ class getCloudTrail:
 if __name__ == "__main__":
     getCloudTrail = getCloudTrail
     getCloudTrail.main()
-
-
-# for record in ListEvent['Events']:
-#     print(record)
-
-# s3 = session.client('s3')
-# response = s3.list_buckets()
-# format_response = json.dumps(response,indent = 4,cls=datetrans.ComplexEncoder)
-# print(format_response)
-# lambda_client = session.client('lambda')
