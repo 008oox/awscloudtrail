@@ -5,7 +5,8 @@ In browser, user can quickly filter event information based on certain field con
 0. We need an access key to login to AWS cloud, for more detail review **AWS_setting.read**
 
 1. create mysql DB server, required release of soft reference: <br>
-    Python: 3.9.18, django: 4.2.8 , mysql: 8.0, boto3: 1.34.1, mysqlclient: 2.2.4
+    Python: 3.9.18, django: 4.2.8 , mysql: 8.0, boto3: 1.34.1, mysqlclient: 2.2.4 <br>
+    mysqlclient required linux dependency package: libmysqlclient-dev(ubuntu); mysql-devel(centos)
 
 2. Mysql8.0: database name should be 'cloudtrailrecord', cotains 2 tables: <br>
     'cloudtrailcndev' & 'cloudtrailcnprod'. reference to cloudtrailapp/models.py<br>
