@@ -87,3 +87,5 @@ In browser, user can quickly filter event information based on certain field con
 ![Code Demo](./images/Main.gif)<br>
 
 ![Code Demo](./images/resource.gif)<br>
+
+![Code Demo](./images/structure.gif)<br>

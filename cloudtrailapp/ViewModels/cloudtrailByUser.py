@@ -8,6 +8,7 @@ def get_cloudtrail_records_all(request, ENV, Table):
     resourcename_filter = ""
     sourceipaddr_filter = ""
     useragent_filter = ""
+    RequestParameters_filter = ""
 
     if request.method == "POST":
         username_filter = request.POST.get("UserName", "")
@@ -16,6 +17,7 @@ def get_cloudtrail_records_all(request, ENV, Table):
         resourcename_filter = request.POST.get("ResourceName", "")
         sourceipaddr_filter = request.POST.get("sourceIPAddr", "")
         useragent_filter = request.POST.get("UserAgent", "")
+        RequestParameters_filter = request.POST.get("RequestParameters", "")
 
         request.session["username_filter"] = username_filter
         request.session["eventname_filter"] = eventname_filter
@@ -23,6 +25,7 @@ def get_cloudtrail_records_all(request, ENV, Table):
         request.session["resourcename_filter"] = resourcename_filter
         request.session["sourceipaddr_filter"] = sourceipaddr_filter
         request.session["useragent_filter"] = useragent_filter
+        request.session["RequestParameters_filter"] = RequestParameters_filter
 
     else:
         username_filter = request.session.get("username_filter", "")
@@ -31,6 +34,7 @@ def get_cloudtrail_records_all(request, ENV, Table):
         resourcename_filter = request.session.get("resourcename_filter", "")
         sourceipaddr_filter = request.session.get("sourceipaddr_filter", "")
         useragent_filter = request.session.get("useragent_filter", "")
+        RequestParameters_filter = request.session.get("RequestParameters_filter", "")
 
     filters = {}
     if username_filter:
@@ -45,6 +49,8 @@ def get_cloudtrail_records_all(request, ENV, Table):
         filters["sourceIPAddr__icontains"] = sourceipaddr_filter
     if useragent_filter:
         filters["UserAgent__icontains"] = useragent_filter
+    if RequestParameters_filter:
+        filters["RequestParameters__icontains"] = RequestParameters_filter
 
     records = Table[ENV].objects.filter(**filters).order_by("EventTime")
     items_per_page = 200
@@ -58,4 +64,13 @@ def get_cloudtrail_records_all(request, ENV, Table):
     except EmptyPage:
         page_records = paginator.page(paginator.num_pages)
 
-    return page_records, username_filter, eventname_filter, resourcetype_filter, resourcename_filter, sourceipaddr_filter, useragent_filter
+    return (
+        page_records,
+        username_filter,
+        eventname_filter,
+        resourcetype_filter,
+        resourcename_filter,
+        sourceipaddr_filter,
+        useragent_filter,
+        RequestParameters_filter,
+    )

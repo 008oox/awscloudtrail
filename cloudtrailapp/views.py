@@ -35,9 +35,16 @@ def update_data(request, ENV):
 
 
 def cloudtrail_records(request, ENV):
-    page_records, username_filter, eventname_filter, resourcetype_filter, resourcename_filter, sourceipaddr_filter, useragent_filter = (
-        cloudtrailByUser.get_cloudtrail_records_all(request=request, ENV=ENV, Table=Table)
-    )
+    (
+        page_records,
+        username_filter,
+        eventname_filter,
+        resourcetype_filter,
+        resourcename_filter,
+        sourceipaddr_filter,
+        useragent_filter,
+        RequestParameters_filter,
+    ) = cloudtrailByUser.get_cloudtrail_records_all(request=request, ENV=ENV, Table=Table)
     return render(
         request,
         "cloudtrailrecords.html",
@@ -49,6 +56,7 @@ def cloudtrail_records(request, ENV):
             "resourcename_filter": resourcename_filter,
             "sourceipaddr_filter": sourceipaddr_filter,
             "useragent_filter": useragent_filter,
+            "RequestParameters_filter": RequestParameters_filter,
             "ENV": ENV,
         },
     )
