@@ -9,7 +9,8 @@ sys.path.append(SaveDirectory)
 
 
 from Save import SettleAPI as SetAPI
-import datetrans as datetrans
+
+# import datetrans as datetrans
 
 
 class getCloudTrail:
