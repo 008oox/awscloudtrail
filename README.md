@@ -1,4 +1,4 @@
-# awscloudtrail 
+# awscloudtrail (Using python Django framework)
 These codes used for downloading cloudtrail data from AWS saved into mysql database.<br>
 In browser, user can quickly filter event information based on certain field content and trace related log details.<br>
 
