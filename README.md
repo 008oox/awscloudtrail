@@ -10,7 +10,7 @@ In browser, user can quickly filter event information based on certain field con
 
 2. Mysql8.0: database name should be 'cloudtrailrecord', cotains 2 tables: <br>
     'cloudtrailcndev' & 'cloudtrailcnprod'. reference to cloudtrailapp/models.py<br>
-    config awscloudtrail/settings.py:  (this config define database in settings.py)
+    config awscloudtrail/settings.py:  (this config define database connection parameters)
     ```json
     DATABASES = {
         "default": {
