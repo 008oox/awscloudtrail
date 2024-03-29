@@ -70,15 +70,15 @@ In browser, user can quickly filter event information based on certain field con
    python manage.py migrate
 
 6. Start django: <br>
-   python manage.py runserver <IP:port> or create a soft link point to init.d/cloudtrail
+   python manage.py runserver {IP:port} or create a soft link point to init.d/cloudtrail
 
 7. open web link<br>
    Get all data from database:<br>
-   http://<IP:port>/cloudtrailapp/cloudtrailrecords/cndev/ <br>
-   http://<IP:port>/cloudtrailapp/cloudtrailrecords/cnprod/ <br>
+   http://{IP:port}/cloudtrailapp/cloudtrailrecords/cndev/ <br>
+   http://{IP:port}/cloudtrailapp/cloudtrailrecords/cnprod/ <br>
    Filter data which user use AWS resource through DateTime and UserName field:<br>
-   http://<IP:port>/cloudtrailapp/resource/cndev/ <br>
-   http://<IP:port>/cloudtrailapp/resource/cnprod/ <br>
+   http://{IP:port}/cloudtrailapp/resource/cndev/ <br>
+   http://{IP:port}/cloudtrailapp/resource/cnprod/ <br>
 
 8. Button 'sync to latest' use timestamp, file location: cloudtrailapp/timeStamp/Lastcndev.txt & Lastcnprod.txt<br>
    Timestamp in file is used as start timestamp, after finishing sync, new timestamp will be replaced into file:<br>
