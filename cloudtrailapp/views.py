@@ -5,14 +5,14 @@ from .ViewModels import cloudtrailByUser, QueryResource
 
 from .utils import render_Str_Name
 from django.shortcuts import render
-from .models import CloudTrailCndevRecord, CloudTrailCnprodRecord
+from .models import CloudTrailCndevRecord, CloudTrailCnprodRecord, CloudTrailCn09Record
 
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 
-Table = {"cndev": CloudTrailCndevRecord, "cnprod": CloudTrailCnprodRecord}
+Table = {"cndev": CloudTrailCndevRecord, "cnprod": CloudTrailCnprodRecord, "cn09": CloudTrailCn09Record}
 
 
 def GetRecordByUser(ENV):

@@ -11,7 +11,9 @@ workdir="$(dirname $SCRIPT_DIR)"
 
 daemon_start() {
     cd $workdir
-    nohup python3 $workdir/manage.py runserver 0.0.0.0:31080 > $workdir/logs/access.log 2>&1  &
+    mkdir -p $workdir/../logs 2>/dev/null
+    nohup python3 $workdir/manage.py runserver 0.0.0.0:31080 > $workdir/../logs/access.log 2>&1  &
+    chmod 644 $workdir/../logs/access.log
     echo "Server started."
 }
 
