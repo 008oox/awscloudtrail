@@ -50,10 +50,11 @@ class getCloudTrail:
         return Start
 
     def main():
-        session = SetAPI.SettleAPI.getSession("cndev")
+        ENV = "cn09"
+        session = SetAPI.SettleAPI.getSession(ENV)
         End = int(time.time()) - 300
         # AWS will update in CloudTrail per 5 mins
-        Start = getCloudTrail.Sync_time(End)
+        Start = getCloudTrail.Sync_time(End, ENV)
         print(Start)
         all_events = getCloudTrail.LookupEvents(session, "Username", "king.chen", Start, End)
         filtered_events = [event for event in all_events if event.get("EventName") != "LookupEvents"]
