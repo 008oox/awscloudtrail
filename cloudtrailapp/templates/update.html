@@ -1,0 +1,29 @@
+<!-- myapp/templates/update.html -->
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Update Data</title>
+    <script>
+        window.onload = function () {
+            var message = "{{ message }}";
+            if (message) {
+                alert(message);
+            }
+        };
+    </script>
+</head>
+
+<body>
+    <h1>Sync Latest Data</h1>
+    {% if error_message %}
+    <p style="color: red;">{{ error_message }}</p>
+    {% else %}
+    <form method="post" action="{% url 'update_data' ENV=ENV %}">
+        {% csrf_token %}
+        <button type="submit">Sync Now</button>
+    </form>
+    {% endif %}
+</body>
+
+</html>
