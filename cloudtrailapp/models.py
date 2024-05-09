@@ -34,3 +34,9 @@ class CloudTrailCn09Record(CloudTrailRecord):
     class Meta:
         db_table = "cloudtrailcn09"
         app_label = "cloudtrailapp"
+
+
+class CloudTrailCn01Record(CloudTrailRecord):
+    class Meta:
+        db_table = "cloudtrailcn01"
+        app_label = "cloudtrailapp"
