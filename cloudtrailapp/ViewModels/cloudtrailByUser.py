@@ -51,11 +51,19 @@ def get_cloudtrail_records_all(request, ENV, Table):
         filters["UserAgent__icontains"] = useragent_filter
     if RequestParameters_filter:
         filters["RequestParameters__icontains"] = RequestParameters_filter
+    
+    if not filters:
+        records = Table[ENV].objects.all().order_by("EventTime")
+    else:
+        records = Table[ENV].objects.filter(**filters).order_by("EventTime")
 
-    records = Table[ENV].objects.filter(**filters).order_by("EventTime")
     items_per_page = 200
     paginator = Paginator(records, items_per_page)
-    page_number = int(request.GET.get("page", 1))
+
+    try:
+        page_number = int(request.POST.get("page", 1))
+    except ValueError:
+        page_number = 1
 
     try:
         page_records = paginator.page(page_number)

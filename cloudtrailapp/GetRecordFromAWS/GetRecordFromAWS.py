@@ -1,4 +1,4 @@
-import os, sys, time, json
+import os, sys, time, json, logging
 from .GetCloudTrail import getCloudTrail
 
 current_file_path = os.path.abspath(__file__)
@@ -6,6 +6,7 @@ SaveDirectory = os.path.abspath(os.path.join(current_file_path, "../../../../"))
 sys.path.append(SaveDirectory)
 from Save import SettleAPI as SetAPI
 
+logger = logging.getLogger('cloudtrailapp')
 
 class GetRecordFromAwsByUser:
     def GetRecordsByUser(ENV):
@@ -14,7 +15,6 @@ class GetRecordFromAwsByUser:
         # timestamp should be pushed forward 5 mins, as in AWS cloudtrail records will be synced per 5 mins
         Start = getCloudTrail.Sync_time(End, ENV)
         UserList = GetRecordFromAwsByUser.getUserList(session)
-        processed_events_list, all_processed_events = [], []
 
         def get_combined_resource_values(resources, key):
             if resources:
@@ -23,43 +23,36 @@ class GetRecordFromAwsByUser:
                 return "-"
 
         try:
+            logger.info(f"Processing {len(UserList)} users' CloudTrail events")
+            total_events = 0
             for Dict in UserList:
                 User = Dict["UserName"]
+                logger.debug(f"Processing events for user: {User}")
                 all_events = getCloudTrail.LookupEvents(session, "Username", User, Start, End)
-                filtered_events = [event for event in all_events if event.get("EventName") != "LookupEvents"]
-                for record in filtered_events:
-                    cloudTrailEvt = json.loads(record["CloudTrailEvent"])
-                    record["CloudTrailEvent"] = cloudTrailEvt
-                    request_parameters = cloudTrailEvt.get("requestParameters")
-                    output = {
-                        "UserName": record["Username"],
-                        "EventName": record["EventName"],
-                        "UserAgent": record["CloudTrailEvent"]["userAgent"][:200],
-                        "EventTime": record["EventTime"],
-                        "ResourceType": get_combined_resource_values(record["Resources"], "ResourceType")[:200],
-                        "ResourceName": get_combined_resource_values(record["Resources"], "ResourceName")[:200],
-                        "sourceIPAddr": record["CloudTrailEvent"]["sourceIPAddress"],
-                        "RequestParameters": json.dumps(request_parameters) if request_parameters else "-",
-                    }
-                    print(output)
-                    if len(processed_events_list) > 0:
-                        LastRecord = processed_events_list[-1]
-                        if (LastRecord.get("EventName") != output.get("EventName")) or (LastRecord.get("UserName") != output.get("UserName")):
-                            processed_events_list.append(output)
-                    else:
-                        processed_events_list.append(output)
-
-                    if len(processed_events_list) >= 10000:
-                        all_processed_events.append(tuple(processed_events_list[::-1]))
-                        processed_events_list.clear()
-
-            all_processed_events.append(tuple(processed_events_list[::-1]))
+                for record in all_events:
+                    if record.get("EventName") != "LookupEvents":
+                        cloudTrailEvt = json.loads(record["CloudTrailEvent"])
+                        record["CloudTrailEvent"] = cloudTrailEvt
+                        request_parameters = cloudTrailEvt.get("requestParameters", {})
+                        output = {
+                            "UserName": record.get("Username"),
+                            "EventName": record.get("EventName"),
+                            "UserAgent": record["CloudTrailEvent"].get("userAgent")[:200],
+                            "EventTime": record.get("EventTime"),
+                            "ResourceType": get_combined_resource_values(record.get("Resources"), "ResourceType")[:200],
+                            "ResourceName": get_combined_resource_values(record.get("Resources"), "ResourceName")[:200],
+                            "sourceIPAddr": record["CloudTrailEvent"].get("sourceIPAddress"),
+                            "RequestParameters": json.dumps(request_parameters) if request_parameters else "-",
+                        }
+                        total_events += 1
+                        yield output
+                        
+            logger.info("Completed processing for ENV: %s, total events processed: %d", ENV, total_events)
 
         except Exception as e:
+            logger.error(f"Error occurred while processing records for ENV: {ENV}", exc_info=True)
             getCloudTrail.Sync_time(Start)
             raise e
-
-        return all_processed_events[::-1]
 
     def getUserList(session):
         IAM = session.client("iam")

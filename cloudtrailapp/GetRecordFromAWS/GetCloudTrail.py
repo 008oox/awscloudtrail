@@ -28,17 +28,18 @@ class getCloudTrail:
         cloudtrail = Session.client("cloudtrail")
         StartTime = datetime.utcfromtimestamp(Start)
         EndTime = datetime.utcfromtimestamp(End)
-        all_events = []
+        # all_events = []
         next_token = None
         while True:
             ListEvent = getCloudTrail.lookupCloudEvents(cloudtrail, key, keyvalue, StartTime, EndTime, next_token)
-            all_events.extend(ListEvent["Events"])
+            # all_events.extend(ListEvent["Events"])
+            for Event in ListEvent["Events"]:
+                yield Event
             if "NextToken" in ListEvent:
                 next_token = ListEvent["NextToken"]
             else:
                 break
-
-        return all_events
+        # return all_events
 
     def Sync_time(End, ENV):
         File_path = os.path.join(timestamp_path, "timeStamp", "Last" + ENV + ".txt")
