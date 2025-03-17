@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Directory Browser</title>
+  <script>
+    function loadDirectory(path) {
+      fetch('/list_files/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: 'path=' + encodeURIComponent(path)
+      })
+      .then(response => response.json())
+      .then(data => {
+        const fileListContainer = document.getElementById('file-list');
+        fileListContainer.innerHTML = ''; // 清空当前列表
+
+        if (data.error) {
+          const errorMessage = document.createElement('div');
+          errorMessage.textContent = 'Error: ' + data.error;
+          fileListContainer.appendChild(errorMessage);
+          return;
+        }
+
+        data.files.forEach(item => {
+          const listItem = document.createElement('div');
+          const itemName = document.createElement('span');
+          itemName.textContent = item.name;
+          if (item.type === 'directory') {
+            const folderIcon = document.createElement('span');
+            folderIcon.textContent = '[+]';
+            folderIcon.style.cursor = 'pointer';
+            folderIcon.onclick = () => loadDirectory(item.path);
+            listItem.appendChild(folderIcon);
+          } else {
+            listItem.textContent = '[File] ' + item.name;
+          }
+          listItem.appendChild(itemName);
+          fileListContainer.appendChild(listItem);
+        });
+      })
+      .catch(error => console.error('Error loading directory:', error));
+    }
+
+    window.onload = () => loadDirectory('');
+  </script>
+</head>
+<body>
+  <h1>Directory Browser</h1>
+  <div id="file-list"></div>
+</body>
+</html>
+

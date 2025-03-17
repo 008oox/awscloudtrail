@@ -1,0 +1,29 @@
+<li>
+    {% if node.type == 'dir' %}
+        <div>
+            <span class="toggle" onclick="toggleNode(this)">[+]</span>
+            <span class="dir">{{ node.name }}</span>
+        </div>
+        {% if node.children %}
+            <ul class="children" style="display: none;">
+                {% for child in node.children %}
+                    {% include 'file_node.html' with node=child %}
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% else %}
+        <span class="file">
+            <a href="{% url 'view_file' %}?path={{ node.path|urlencode }}">{{ node.name }}</a>
+            {% if node.name|slice:"-3:" == ".py" %}
+                <!-- 内嵌的运行表单 -->
+                <form action="{% url 'run_task' %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <input type="hidden" name="file_path" value="{{ node.path }}">
+                    <input type="text" name="parameter" placeholder="参数" required style="width:150px;">
+                    <button type="submit">运行</button>
+                </form>
+            {% endif %}
+        </span>
+    {% endif %}
+</li>
+

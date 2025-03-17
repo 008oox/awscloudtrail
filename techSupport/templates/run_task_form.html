@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>runTask: {{ file_name }}</title>
+</head>
+<body>
+    <h1>runTask: {{ file_name }}</h1>
+    <form method="post" action="{% url 'run_task' %}">
+        {% csrf_token %}
+        <input type="hidden" name="file_path" value="{{ file_path }}">
+        <label for="parameter">参数 (例如 csv 或 HFS-2208-1406):</label>
+        <input type="text" id="parameter" name="parameter" required>
+        <button type="submit">Run</button>
+    </form>
+    <p><a href="{% url 'list_files' %}">返回目录</a></p>
+</body>
+</html>
+

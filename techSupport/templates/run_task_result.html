@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>任务结果: {{ csv_filename }}</title>
+    <style>
+        pre {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border: 1px solid #ccc;
+            white-space: pre-wrap;
+        }
+
+	.top-bar {
+            display: flex;
+            margin: 40px 20px;
+	    align-items: flex-start;
+        }
+
+        .top-bar a, .top-bar button {
+            margin-right: 20px;
+	    margin-top: 10px;
+        }
+
+        pre {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border: 1px solid #ccc;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+	{% if csv_file_path %}
+            <h2>CSV 结果文件</h2>
+            <form id="downloadForm" method="POST" action="{% url 'download_file' %}">
+                {% csrf_token %}
+                <input type="hidden" name="csv_filename" value="{{ csv_file_path }}">
+                <button type="submit">下载 CSV 文件</button>
+            </form>
+        {% endif %}
+        <p><a href="{% url 'list_files' %}">返回目录</a></p>
+    </div>
+    <h1>任务结果: {{ csv_filename }}</h1>
+    <p><strong>命令:</strong> {{ command }}</p>
+    <p><strong>退出码:</strong> {{ exit_code }}</p>
+
+    <h2>输出日志</h2>
+    <pre>{{ output }}</pre>
+
+    {% if error %}
+    <h2>错误日志</h2>
+    <pre>{{ error }}</pre>
+    {% endif %}
+
+</body>
+</html>
+

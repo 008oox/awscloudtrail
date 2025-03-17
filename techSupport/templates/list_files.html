@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>文件仓库</title>
+    <style>
+        ul { list-style: none; padding-left: 20px; }
+        li { margin: 5px 0; }
+        .dir { font-weight: bold; cursor: pointer; font-size: 1.2em; color: black; }
+        .file { font-size: 1em; color: blue; }
+        .toggle { cursor: pointer; margin-right: 5px; }
+    </style>
+</head>
+<body>
+    <h1>文件仓库</h1>
+    <ul>
+        {% for node in file_tree %}
+            {% include 'file_node.html' with node=node %}
+        {% endfor %}
+    </ul>
+
+    <script>
+        function toggleNode(el) {
+            var childrenUl = el.parentNode.nextElementSibling;
+            if (!childrenUl) return;
+            if (childrenUl.style.display === 'none') {
+                childrenUl.style.display = 'block';
+                el.textContent = '[-]';
+            } else {
+                childrenUl.style.display = 'none';
+                el.textContent = '[+]';
+            }
+        }
+    </script>
+</body>
+</html>
+
